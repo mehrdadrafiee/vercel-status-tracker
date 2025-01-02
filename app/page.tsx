@@ -6,7 +6,7 @@ import { DeploymentProps } from "@/types/deployments";
 import React from "react";
 import { ArrowUpRightIcon, RefreshCw, StarIcon, GithubIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast"
 
 export default function Home() {
@@ -17,8 +17,8 @@ export default function Home() {
   const [starsCount, setStarsCount] = React.useState<number>(0);
   const [deployments, setDeployments] = React.useState<DeploymentProps[]>([]);
   const [groupedDeployments, setGroupedDeployments] = React.useState<{ [key: string]: DeploymentProps[] }>({});
-  // const [teamId, setTeamId] = React.useState<string>("");
-  // const [apiToken, setApiToken] = React.useState<string>("");
+  const [teamIdValue, setTeamIdValue] = React.useState<string>("");
+  const [apiTokenValue, setApiTokenValue] = React.useState<string>("");
 
   const groupDeploymentsByName = (deployments: DeploymentProps[]) => {
     return deployments.reduce((acc: { [key: string]: DeploymentProps[] }, deployment) => {
@@ -29,33 +29,38 @@ export default function Home() {
   };
 
   const fetchDeployments = async () => {
-    // if (!teamId || !apiToken) {
-    //   toast({
-    //     title: "Missing credentials",
-    //     description: "Please provide both Team ID and API Token",
-    //     variant: "destructive",
-    //   });
-    //   return;
-    // }
-
     try {
       setLoading(true);
+      setError(null);
+      
+      if (!teamIdValue && !process.env.NEXT_PUBLIC_VERCEL_TEAM_ID) {
+        throw new Error("Team ID is required");
+      }
+      
+      if (!apiTokenValue && !process.env.NEXT_PUBLIC_VERCEL_API_TOKEN) {
+        throw new Error("API Token is required");
+      }
+
       const response = await fetch("/api/vercel", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        // body: JSON.stringify({ teamId, apiToken }),
+        body: JSON.stringify({
+          teamId: teamIdValue || process.env.NEXT_PUBLIC_VERCEL_TEAM_ID,
+          apiToken: apiTokenValue || process.env.NEXT_PUBLIC_VERCEL_API_TOKEN
+        })
       });
       
+      const data = await response.json();
+      
       if (!response.ok) {
-        throw new Error("Invalid credentials or API error");
+        throw new Error(data.error || "Failed to fetch deployments");
       }
       
-      const data = await response.json();
-      const deployments = data.deployments;
-      setDeployments(deployments);
-      setGroupedDeployments(groupDeploymentsByName(deployments));
+
+      setDeployments(data.deployments);
+      setGroupedDeployments(groupDeploymentsByName(data.deployments));
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unknown error occurred");
       toast({
@@ -99,30 +104,12 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-gray-100">
-      {/* <div className="flex justify-around items-center gap-2 w-1/2 mx-auto">
-        <div className="space-y-2 flex-1">
-          <Input
-            placeholder="Vercel team id: team_xxxxxx"
-            value={teamId}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeamId(e.target.value)}
-          />
-        </div>
-        <div className="space-y-2 flex-1">
-          <Input
-            type="password"
-            placeholder="Vercel API Token"
-            value={apiToken}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiToken(e.target.value)}
-          />
-        </div>
-        <Button variant="outline" onClick={handleRefresh}>Fetch Deployments</Button>
-      </div> */}
       <header className="flex justify-between w-1/2 mx-auto font-mono">
         <Button className="p-0" variant="link" asChild>
           <a href="https://github.com/mehrdadrafiee">@mehrdadrafiee</a>
         </Button>
         <div className="flex items-center justify-end gap-2">
-          <Button variant="outline" asChild>
+          <Button variant="outline" className="bg-white hover:shadow-md" asChild>
             <a href="https://github.com/mehrdadrafiee/vercel-status-tracker" className="flex items-center">
               <GithubIcon className="fill-current h-4 w-4 mr-4" />
               <StarIcon fill="currentColor" className="h-3 w-3 text-yellow-500 mr-1" />
@@ -132,6 +119,26 @@ export default function Home() {
           </Button>
         </div>
       </header>
+      <div className="flex justify-around items-center gap-2 w-1/2 mx-auto">
+        <div className="space-y-2 flex-1">
+          <Input
+            value={teamIdValue}
+            className="bg-white"
+            placeholder="Vercel team id: team_xxxxxx"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeamIdValue(e.target.value)}
+          />
+        </div>
+        <div className="space-y-2 flex-1">
+          <Input
+            type="password"
+            value={apiTokenValue}
+            className="bg-white"
+            placeholder="Vercel API Token"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiTokenValue(e.target.value)}
+          />
+        </div>
+        <Button variant="outline" className="bg-white hover:shadow-md" onClick={handleRefresh}>Fetch Deployments</Button>
+      </div>
       <div className="flex gap-4 w-1/2 mx-auto">
         <div className="flex-1 bg-white p-4 rounded-lg shadow-sm">
           <h3 className="text-sm text-gray-500">Total Deployments</h3>
@@ -159,30 +166,30 @@ export default function Home() {
           variant="outline"
           onClick={handleRefresh}
           disabled={isRefreshing}
-          className="gap-2"
+          className="gap-2 bg-white hover:shadow-md"
         >
           <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
       </div>
-      <main className="flex flex-col flex-wrap gap-2 justify-center items-center">
-        {/* {!(teamId && apiToken) ? (
-          <p className="text-lg text-gray-700">Please provide both Team ID and API Token.</p>
-        ) : ( */}
-        {
-          loading ? (
-            <p className="text-lg text-gray-700">Loading...</p>
-          ) : error ? (
+      <main className="flex flex-col flex-wrap gap-2 justify-center items-center">  
+        {loading ? (
+          <div className="flex items-center gap-2">
+            <RefreshCw className="h-4 w-4 animate-spin" />
+            <p className="text-lg text-gray-700">Loading deployments...</p>
+          </div>
+        ) : error ? (
+          <div className="text-center space-y-2">
             <p className="text-lg text-red-500">Error: {error}</p>
-          ) : (
-            Object.entries(groupedDeployments).map(([name, deployments]) => (
-              <Accordion key={name} type="single" collapsible className="w-1/2">
-                <ProjectAccordion name={name} deployments={deployments} />
-              </Accordion>
-            ))
-          )
-        }
-        {/* )} */}
+            <Button variant="outline" onClick={handleRefresh}>Try Again</Button>
+          </div>
+        ) : (
+          Object.entries(groupedDeployments).map(([name, deployments]) => (
+            <Accordion key={name} type="single" collapsible className="w-1/2">
+              <ProjectAccordion name={name} deployments={deployments} />
+            </Accordion>
+          ))
+        )}
       </main>
       <footer className="flex gap-6 flex-wrap items-center justify-center mt-8">
         
