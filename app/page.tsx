@@ -4,7 +4,8 @@ import ProjectAccordion from "@/components/ProjectAccordion";
 import { Accordion } from "@/components/ui/accordion";
 import { DeploymentProps } from "@/types/deployments";
 import React from "react";
-import { ArrowUpRightIcon, RefreshCw, StarIcon, GithubIcon } from "lucide-react";
+import { ArrowUpRightIcon, RefreshCw, StarIcon } from "lucide-react";
+import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast"
@@ -104,7 +105,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-gray-100">
+    <div className="flex flex-col min-h-screen p-4 gap-4 sm:p-4 font-[family-name:var(--font-geist-sans)] bg-gray-100">
       <header className="flex justify-between w-full max-w-4xl mx-auto font-mono mb-8">
         <Button className="p-0" variant="link" asChild>
           <a href="https://github.com/mehrdadrafiee">@mehrdadrafiee</a>
@@ -112,7 +113,7 @@ export default function Home() {
         <div className="flex items-center justify-end gap-2">
           <Button variant="outline" className="bg-white hover:shadow-md" asChild>
             <a href="https://github.com/mehrdadrafiee/vercel-status-tracker" className="flex items-center">
-              <GithubIcon className="fill-current h-4 w-4 mr-4" />
+              <GitHubLogoIcon className="fill-current h-4 w-4 mr-4" />
               <StarIcon fill="currentColor" className="h-3 w-3 text-yellow-500 mr-1" />
               <span className="font-semibold">{starsCount}</span>
               <ArrowUpRightIcon className="h-4 w-4 ml-4" />
@@ -175,7 +176,6 @@ export default function Home() {
           Refresh
         </Button>
       </div>
-
       <main className="flex flex-col flex-wrap gap-2 justify-center items-center w-full max-w-4xl mx-auto">  
         {loading ? (
           <div className="flex items-center gap-2">
@@ -184,16 +184,24 @@ export default function Home() {
           </div>
         ) : error ? (
           <div className="text-center space-y-2">
-            <p className="text-lg text-red-500">Error: {error}</p>
-            <Button variant="outline" onClick={handleRefresh}>Try Again</Button>
+            <p>Please enter valid Vercel Team ID and API Token.</p>
+            <small className="text-sm text-gray-500">
+              Get your {' '}
+              <span className="font-bold text-blue-500">
+                <Link href="https://vercel.com/docs/accounts/create-a-team#find-your-team-id">Team ID</Link>
+              </span> and {' '}
+              <span className="font-bold text-blue-500">
+                <Link href="https://vercel.com/guides/how-do-i-use-a-vercel-api-access-token">API Token</Link>
+              </span> from Vercel.
+            </small>
           </div>
-        ) : (
-          Object.entries(groupedDeployments).map(([name, deployments]) => (
-            <Accordion key={name} type="single" collapsible className="w-full max-w-4xl">
-              <ProjectAccordion name={name} deployments={deployments} />
-            </Accordion>
-          ))
-        )}
+         ) : (
+           Object.entries(groupedDeployments).map(([name, deployments]) => (
+             <Accordion key={name} type="single" collapsible className="w-full max-w-4xl">
+               <ProjectAccordion name={name} deployments={deployments} />
+             </Accordion>
+           ))
+         )}
       </main>
       
       <footer className="flex gap-4 flex-wrap items-center justify-center mt-8">
