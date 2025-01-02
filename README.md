@@ -7,8 +7,8 @@ VERCEL_API_TOKEN=your_vercel_api_token
 VERCEL_TEAM_ID=your_team_id
 ```
 
-## Getting Started
-
 1. Clone the repository
 2. Run `npm install`
 3. Run `npm run dev`
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
