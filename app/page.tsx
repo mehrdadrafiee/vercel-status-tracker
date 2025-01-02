@@ -104,7 +104,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-gray-100">
+    <div className="flex flex-col min-h-screen p-8 pb-20 gap-8 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-gray-100">
       <header className="flex justify-between w-full max-w-4xl mx-auto font-mono mb-8">
         <Button className="p-0" variant="link" asChild>
           <a href="https://github.com/mehrdadrafiee">@mehrdadrafiee</a>
@@ -121,7 +121,7 @@ export default function Home() {
         </div>
       </header>
       
-      <div className="flex flex-col sm:flex-row justify-around items-center gap-4 w-full max-w-4xl mx-auto mb-8">
+      <div className="flex flex-col sm:flex-row justify-around items-center gap-2 w-full max-w-4xl mx-auto mb-8">
         <div className="space-y-2 flex-1">
           <Input
             value={teamIdValue}
@@ -142,7 +142,7 @@ export default function Home() {
         <Button variant="outline" className="bg-white hover:shadow-md" onClick={handleRefresh}>Fetch Deployments</Button>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl mx-auto mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 w-full max-w-4xl mx-auto mb-8">
         <div className="flex-1 bg-white p-4 rounded-lg shadow-sm">
           <h3 className="text-sm text-gray-500">Total Deployments</h3>
           <p className="text-2xl font-bold">{getProjectStats().totalDeployments}</p>
@@ -176,7 +176,7 @@ export default function Home() {
         </Button>
       </div>
 
-      <main className="flex flex-col flex-wrap gap-4 justify-center items-center w-full max-w-4xl mx-auto">  
+      <main className="flex flex-col flex-wrap gap-2 justify-center items-center w-full max-w-4xl mx-auto">  
         {loading ? (
           <div className="flex items-center gap-2">
             <RefreshCw className="h-4 w-4 animate-spin" />
@@ -196,7 +196,7 @@ export default function Home() {
         )}
       </main>
       
-      <footer className="flex gap-6 flex-wrap items-center justify-center mt-8">
+      <footer className="flex gap-4 flex-wrap items-center justify-center mt-8">
         <p className="text-sm text-gray-500">Built with:</p>
         <Button variant="link" asChild>
           <Link href="https://nextjs.org">
@@ -210,7 +210,7 @@ export default function Home() {
         </Button>
         <Button variant="link" asChild>
           <Link href="https://ui.shadcn.com">
-            Shadcn
+            Shadcn/UI
           </Link>
         </Button>
       </footer>
