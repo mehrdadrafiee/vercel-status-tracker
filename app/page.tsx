@@ -8,7 +8,7 @@ import { ArrowUpRightIcon, RefreshCw, StarIcon, GithubIcon } from "lucide-react"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast"
-
+import Link from "next/link";
 export default function Home() {
   const { toast } = useToast();
   const [loading, setLoading] = React.useState<boolean>(true);
@@ -105,7 +105,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] bg-gray-100">
-      <header className="flex justify-between w-1/2 mx-auto font-mono">
+      <header className="flex justify-between w-full max-w-4xl mx-auto font-mono mb-8">
         <Button className="p-0" variant="link" asChild>
           <a href="https://github.com/mehrdadrafiee">@mehrdadrafiee</a>
         </Button>
@@ -120,7 +120,8 @@ export default function Home() {
           </Button>
         </div>
       </header>
-      <div className="flex justify-around items-center gap-2 w-1/2 mx-auto">
+      
+      <div className="flex flex-col sm:flex-row justify-around items-center gap-4 w-full max-w-4xl mx-auto mb-8">
         <div className="space-y-2 flex-1">
           <Input
             value={teamIdValue}
@@ -140,7 +141,8 @@ export default function Home() {
         </div>
         <Button variant="outline" className="bg-white hover:shadow-md" onClick={handleRefresh}>Fetch Deployments</Button>
       </div>
-      <div className="flex gap-4 w-1/2 mx-auto">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-4xl mx-auto mb-8">
         <div className="flex-1 bg-white p-4 rounded-lg shadow-sm">
           <h3 className="text-sm text-gray-500">Total Deployments</h3>
           <p className="text-2xl font-bold">{getProjectStats().totalDeployments}</p>
@@ -161,7 +163,7 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="flex justify-between items-center mx-auto w-1/2">
+      <div className="flex justify-between items-center mx-auto w-full max-w-4xl mb-8">
         <h1 className="text-2xl font-bold">Vercel Deployments | {deployments.length}</h1>
         <Button 
           variant="outline"
@@ -173,7 +175,8 @@ export default function Home() {
           Refresh
         </Button>
       </div>
-      <main className="flex flex-col flex-wrap gap-2 justify-center items-center">  
+
+      <main className="flex flex-col flex-wrap gap-4 justify-center items-center w-full max-w-4xl mx-auto">  
         {loading ? (
           <div className="flex items-center gap-2">
             <RefreshCw className="h-4 w-4 animate-spin" />
@@ -186,14 +189,30 @@ export default function Home() {
           </div>
         ) : (
           Object.entries(groupedDeployments).map(([name, deployments]) => (
-            <Accordion key={name} type="single" collapsible className="w-1/2">
+            <Accordion key={name} type="single" collapsible className="w-full max-w-4xl">
               <ProjectAccordion name={name} deployments={deployments} />
             </Accordion>
           ))
         )}
       </main>
+      
       <footer className="flex gap-6 flex-wrap items-center justify-center mt-8">
-        
+        <p className="text-sm text-gray-500">Built with:</p>
+        <Button variant="link" asChild>
+          <Link href="https://nextjs.org">
+            Next.js
+          </Link>
+        </Button>
+        <Button variant="link" asChild>
+          <Link href="https://tailwindcss.com">
+            TailwindCSS
+          </Link>
+        </Button>
+        <Button variant="link" asChild>
+          <Link href="https://ui.shadcn.com">
+            Shadcn
+          </Link>
+        </Button>
       </footer>
     </div>
   );
