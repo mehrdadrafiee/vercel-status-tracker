@@ -58,9 +58,10 @@ export default function Home() {
         throw new Error(data.error || "Failed to fetch deployments");
       }
       
+      const deployments = data.deployments.reverse();
 
-      setDeployments(data.deployments);
-      setGroupedDeployments(groupDeploymentsByName(data.deployments));
+      setDeployments(deployments);
+      setGroupedDeployments(groupDeploymentsByName(deployments));
     } catch (err) {
       setError(err instanceof Error ? err.message : "An unknown error occurred");
       toast({
