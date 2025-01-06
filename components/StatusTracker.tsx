@@ -3,7 +3,7 @@ import { Separator } from "@/components/ui/separator";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { DeploymentProps } from "@/types/deployments";
 import { differenceInMinutes, format, formatDistanceToNow } from "date-fns";
-import { CheckCircle2, XCircle, AlertTriangle, Clock, GitBranch } from "lucide-react";
+import { CheckCircle2, XCircle, AlertTriangle, Clock, GitBranch, UserIcon } from "lucide-react";
 import React from "react";
 
 type StatusTrackerProps = {
@@ -35,6 +35,7 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
     buildTime: ((deployment.ready - deployment.buildingAt) / 1000).toFixed(1),
     source: deployment.source || 'Unknown',
     branch: deployment.meta?.githubCommitRef || 'Unknown',
+    author: deployment.meta?.githubCommitAuthorName || 'Unknown',
     commitSHA: deployment.meta?.githubCommitSha ? deployment.meta.githubCommitSha.slice(0, 7) : 'Unknown'
   });
 
@@ -85,7 +86,7 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button 
-                    className={`p-2 rounded-none first:rounded-l-md last:rounded-r-md w-full h-10 border-none 
+                    className={`rounded-none first:rounded-l-md last:rounded-r-md w-full h-10 border-none 
                       ${deployment.state === "READY" 
                         ? "bg-emerald-500 hover:bg-emerald-600" 
                         : "bg-red-500 hover:bg-red-600"}`}
@@ -123,6 +124,10 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
                     <div className="flex items-center gap-2">
                       <GitBranch className="w-4 h-4 text-gray-500" />
                       <span>Branch: {getDeploymentStats(deployment).branch}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <UserIcon className="w-4 h-4 text-gray-500" />
+                      <span>Author: {getDeploymentStats(deployment).author}</span>
                     </div>
                   </div>
 
