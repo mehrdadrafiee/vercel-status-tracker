@@ -4,18 +4,19 @@ import ProjectAccordion from "@/components/ProjectAccordion";
 import { Accordion } from "@/components/ui/accordion";
 import { DeploymentProps } from "@/types/deployments";
 import React from "react";
-import { ArrowUpRightIcon, RefreshCw, StarIcon } from "lucide-react";
-import { GitHubLogoIcon } from "@radix-ui/react-icons";
+import { RefreshCwIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast"
 import Link from "next/link";
+import Header from "@/components/shared/Header";
+import Footer from "@/components/shared/Footer";
+
 export default function Home() {
   const { toast } = useToast();
   const [loading, setLoading] = React.useState<boolean>(true);
   const [error, setError] = React.useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = React.useState(false);
-  const [starsCount, setStarsCount] = React.useState<number>(0);
   const [deployments, setDeployments] = React.useState<DeploymentProps[]>([]);
   const [groupedDeployments, setGroupedDeployments] = React.useState<{ [key: string]: DeploymentProps[] }>({});
   const [teamIdValue, setTeamIdValue] = React.useState<string>("");
@@ -75,12 +76,6 @@ export default function Home() {
     }
   };
 
-  const fetchStarsCount = async () => {
-    const res = await fetch("https://api.github.com/repos/mehrdadrafiee/vercel-status-tracker");
-    const data = await res.json();
-    setStarsCount(data.stargazers_count);
-  };
-
   const handleRefresh = async () => {
     setIsRefreshing(true);
     await fetchDeployments();
@@ -89,7 +84,6 @@ export default function Home() {
 
   React.useEffect(() => {
     fetchDeployments();
-    fetchStarsCount();
   }, []);
 
   const getProjectStats = () => {
@@ -106,22 +100,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen p-4 gap-4 sm:p-4 font-[family-name:var(--font-geist-sans)] bg-gray-100">
-      <header className="flex justify-between w-full max-w-4xl mx-auto font-mono mb-8">
-        <Button className="p-0" variant="link" asChild>
-          <a href="https://github.com/mehrdadrafiee">@mehrdadrafiee</a>
-        </Button>
-        <div className="flex items-center justify-end gap-2">
-          <Button variant="outline" className="bg-white hover:shadow-md" asChild>
-            <a href="https://github.com/mehrdadrafiee/vercel-status-tracker" className="flex items-center">
-              <GitHubLogoIcon className="fill-current h-4 w-4 mr-4" />
-              <StarIcon fill="currentColor" className="h-3 w-3 text-yellow-500 mr-1" />
-              <span className="font-semibold">{starsCount}</span>
-              <ArrowUpRightIcon className="h-4 w-4 ml-4" />
-            </a>
-          </Button>
-        </div>
-      </header>
-      
+      <Header />
       <div className="flex flex-col sm:flex-row justify-around items-center gap-2 w-full max-w-4xl mx-auto mb-8">
         <div className="space-y-2 flex-1">
           <Input
@@ -172,14 +151,14 @@ export default function Home() {
           disabled={isRefreshing}
           className="gap-2 bg-white hover:shadow-md"
         >
-          <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+          <RefreshCwIcon className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
       </div>
       <main className="flex flex-col flex-wrap gap-2 justify-center items-center w-full max-w-4xl mx-auto">  
         {loading ? (
           <div className="flex items-center gap-2">
-            <RefreshCw className="h-4 w-4 animate-spin" />
+            <RefreshCwIcon className="h-4 w-4 animate-spin" />
             <p className="text-lg text-gray-700">Loading deployments...</p>
           </div>
         ) : error ? (
@@ -203,25 +182,7 @@ export default function Home() {
            ))
          )}
       </main>
-      
-      <footer className="flex gap-4 flex-wrap items-center justify-center mt-8">
-        <p className="text-sm text-gray-500">Built with:</p>
-        <Button variant="link" asChild>
-          <Link href="https://nextjs.org">
-            Next.js
-          </Link>
-        </Button>
-        <Button variant="link" asChild>
-          <Link href="https://tailwindcss.com">
-            TailwindCSS
-          </Link>
-        </Button>
-        <Button variant="link" asChild>
-          <Link href="https://ui.shadcn.com">
-            Shadcn/UI
-          </Link>
-        </Button>
-      </footer>
+      <Footer />
     </div>
   );
 }
