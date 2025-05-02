@@ -100,13 +100,12 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen p-4 gap-4 sm:p-4 font-(family-name:--font-geist-sans) bg-gray-100">
+    <div className="flex flex-col min-h-screen p-4 gap-4 sm:p-4 font-(family-name:--font-geist-sans)">
       <Header />
       <div className="flex flex-col sm:flex-row justify-around items-center gap-2 w-full max-w-4xl mx-auto mb-8">
         <div className="space-y-2 flex-1">
           <Input
             value={teamIdValue}
-            className="bg-white"
             placeholder="Vercel team id: team_xxxxxx"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeamIdValue(e.target.value)}
           />
@@ -115,7 +114,6 @@ export default function Home() {
           <Input
             type="password"
             value={apiTokenValue}
-            className="bg-white"
             placeholder="Vercel API Token"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiTokenValue(e.target.value)}
           />
@@ -171,12 +169,12 @@ export default function Home() {
         {loading ? (
           <div className="flex items-center gap-2">
             <RefreshCwIcon className="h-4 w-4 animate-spin" />
-            <p className="text-lg text-gray-700">Loading deployments...</p>
+            <p className="text-lg text-neutral-700">Loading deployments...</p>
           </div>
         ) : error ? (
           <div className="text-center space-y-2">
             <p>Please enter valid Vercel Team ID and API Token.</p>
-            <small className="text-sm text-gray-500">
+            <small className="text-sm text-neutral-500">
               Get your {' '}
               <span className="font-bold text-blue-500">
                 <Link href="https://vercel.com/docs/accounts/create-a-team#find-your-team-id">Team ID</Link>
@@ -187,11 +185,13 @@ export default function Home() {
             </small>
           </div>
          ) : (
-           Object.entries(groupedDeployments).map(([name, deployments]) => (
-             <Accordion key={name} type="single" collapsible className="w-full max-w-4xl">
-               <ProjectAccordion name={name} deployments={deployments} />
-             </Accordion>
-           ))
+          <div className="w-full max-w-4xl">
+            {Object.entries(groupedDeployments).map(([name, deployments]) => (
+              <Accordion key={name} type="single" collapsible>
+                <ProjectAccordion name={name} deployments={deployments} />
+              </Accordion>
+            ))}
+          </div>
          )}
       </main>
       <Footer />

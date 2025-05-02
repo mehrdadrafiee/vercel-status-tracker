@@ -31,7 +31,7 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
   const [timeRange, setTimeRange] = React.useState<TimeRange>('7d');
 
   if (!deployments || deployments.length === 0) {
-    return <p className="text-gray-500">No deployment data available</p>;
+    return <p className="text-neutral-500">No deployment data available</p>;
   }
   
   const filteredDeployments = React.useMemo(() => {
@@ -51,7 +51,7 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
             <p className={`text-2xl font-bold ${generateUptimeColor(uptime)}`}>
               {uptime.toFixed(2)}%
             </p>
-            <sub className="text-sm text-gray-500">Uptime ({timeRange})</sub>
+            <sub className="text-sm text-neutral-500">Uptime ({timeRange})</sub>
           </div>
         ) : (
           <div />
@@ -84,7 +84,7 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
                 <TooltipProvider key={`${deployment.name || 'deployment'}-${deployment.uid || index}`}>
                   <Tooltip delayDuration={100}>
                     <TooltipTrigger asChild>
-                      <Button className={`p-0 rounded-none first:rounded-l-md last:rounded-r-md w-full h-10 border-none transition-colors duration-150 ease-in-out ${barColor}`} />
+                      <Button className={`rounded-none first:rounded-l-md last:rounded-r-md flex-1 h-10 transition-colors duration-150 ease-in-out ${barColor}`} />
                     </TooltipTrigger>
                     <DeploymentTooltipContent deployment={deployment} deploymentStats={deploymentStats} />
                   </Tooltip>
@@ -94,7 +94,7 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
         </div>
 
         {deployments.length > 0 && deployments[0].ready && (
-           <div className="flex justify-between text-sm text-gray-500 pt-1">
+           <div className="flex justify-between text-sm text-neutral-500 pt-1">
              <span>{format(deployments[deployments.length - 1].ready, "MMM d")} - {format(deployments[0].ready, "MMM d, yyyy")}</span>
              <span>Last {deployments.length} deployments</span>
            </div>

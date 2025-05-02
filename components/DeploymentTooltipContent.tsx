@@ -26,9 +26,9 @@ const StatusMessage = ({ deployment }: { deployment: DeploymentProps }) => {
 
   const downtime = differenceInMinutes(deployment.ready, deployment.createdAt);
   if (downtime < 1) {
-    return <small className="text-gray-500">Down for less than a minute</small>;
+    return <small className="text-neutral-500">Down for less than a minute</small>;
   }
-  return <small className="text-gray-500">Down for {downtime} minute{downtime !== 1 ? 's' : ''}</small>;
+  return <small className="text-neutral-500">Down for {downtime} minute{downtime !== 1 ? 's' : ''}</small>;
 };
 
 type DeploymentTooltipContentProps = {
@@ -40,7 +40,7 @@ export default function DeploymentTooltipContent({ deployment, deploymentStats }
   const isReady = deployment.state === "READY";
 
   return (
-    <TooltipContent className="p-4 bg-white border-none shadow-md space-y-3 w-64" sideOffset={5}>
+    <TooltipContent className="p-4 bg-white dark:bg-black shadow-md space-y-3" sideOffset={5}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {getStatusIcon(deployment.state)}
@@ -48,7 +48,7 @@ export default function DeploymentTooltipContent({ deployment, deploymentStats }
             {isReady ? "Operational" : "Downtime"}
           </span>
         </div>
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-neutral-500">
           {deployment.ready ? formatDistanceToNow(deployment.ready, { addSuffix: true }) : 'N/A'}
         </span>
       </div>
@@ -63,26 +63,26 @@ export default function DeploymentTooltipContent({ deployment, deploymentStats }
 
       <div className="space-y-2 text-sm">
         <div className="flex items-center gap-2">
-          <ClockIcon className="w-4 h-4 text-gray-500" />
+          <ClockIcon size={16} />
           <span>Build: {deploymentStats.buildTime}s</span>
         </div>
         <div className="flex items-center gap-2">
-          <GitBranchIcon className="w-4 h-4 text-gray-500" />
+          <GitBranchIcon size={16} />
           <span>Branch: {deploymentStats.branch}</span>
         </div>
         <div className="flex items-center gap-2">
-          <UserIcon className="w-4 h-4 text-gray-500" />
+          <UserIcon size={16} />
           <span>Author: {deploymentStats.author}</span>
         </div>
         <div className="flex items-center gap-2">
-          <GitCommitIcon className="w-4 h-4 text-gray-500" />
+          <GitCommitIcon size={16} />
           <span>Commit: {deploymentStats.commitSHA}</span>
         </div>
       </div>
 
       <Separator />
 
-      <div className="text-xs text-gray-500">
+      <div className="text-xs text-neutral-500">
         {deployment.ready ? `Deployed: ${format(deployment.ready, "PPP 'at' pp")}` : 'Deployment time not available'}
       </div>
     </TooltipContent>

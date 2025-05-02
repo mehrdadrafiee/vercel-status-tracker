@@ -4,7 +4,7 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <footer className="flex gap-4 flex-wrap items-center justify-center mt-8">
-      <p className="text-sm text-gray-500">Built with:</p>
+      <p className="text-sm text-neutral-500">Built with:</p>
       <Button variant="link" asChild>
         <Link href="https://nextjs.org">
           Next.js

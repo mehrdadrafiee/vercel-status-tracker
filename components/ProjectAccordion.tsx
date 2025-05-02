@@ -49,17 +49,17 @@ export default function ProjectAccordion({ name, deployments }: ProjectAccordion
   }, [deployments]);
 
   return (
-    <AccordionItem value={name} className="bg-white rounded-lg w-full">
+    <AccordionItem value={name} className="bg-neutral-50 dark:bg-neutral-900 rounded-lg w-full border-1 border-neutral-200 dark:border-neutral-800">
       <AccordionTrigger className="p-4">
         <div className="flex w-full justify-between items-center">
           <div className="flex flex-col items-start gap-1">
             <strong>{name}</strong>
-            <span className="text-sm text-gray-500">
+            <span className="text-sm text-neutral-500">
               Last deployed: {format(new Date(deployments[0].ready), 'MMM d, yyyy')}
             </span>
           </div>
           <div className="flex items-center gap-4">
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-neutral-600">
               {deployments.length} deployments
             </div>
             <Badge className={`border-none ${bgColor}`}>
@@ -74,27 +74,27 @@ export default function ProjectAccordion({ name, deployments }: ProjectAccordion
         </div>
       </AccordionTrigger>
       <AccordionContent className="p-4">
-        <div className="mb-6 grid grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+        <div className="mb-6 grid grid-cols-2 gap-4 p-4 bg-neutral-200 dark:bg-neutral-800 rounded-lg">
           <div className="flex items-center gap-2">
-            <GitBranch className="w-4 h-4 text-gray-500" />
+            <GitBranch className="w-4 h-4 text-neutral-500" />
             <span className="text-sm">
               Branch: {latestDeployment.meta?.githubCommitRef || 'Unknown'}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <GitCommit className="w-4 h-4 text-gray-500" />
+            <GitCommit className="w-4 h-4 text-neutral-500" />
             <span className="text-sm truncate" title={latestDeployment.meta?.githubCommitMessage}>
               Latest commit: {latestDeployment.meta?.githubCommitMessage || 'No commit message'}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-gray-500" />
+            <User className="w-4 h-4 text-neutral-500" />
             <span className="text-sm">
               Author: {latestDeployment.meta?.githubCommitAuthorName || 'Unknown'}
             </span>
           </div>
           <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-gray-500" />
+            <Clock className="w-4 h-4 text-neutral-500" />
             <span className="text-sm">
               Average build time: {((deployments.reduce((acc, deployment) => acc + (deployment.ready - deployment.buildingAt), 0) / deployments.length / 1000).toFixed(1))}s
             </span>
