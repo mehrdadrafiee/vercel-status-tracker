@@ -11,6 +11,7 @@ import { useToast } from "@/hooks/use-toast"
 import Link from "next/link";
 import Header from "@/components/shared/Header";
 import Footer from "@/components/shared/Footer";
+import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 
 export default function Home() {
   const { toast } = useToast();
@@ -119,38 +120,49 @@ export default function Home() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiTokenValue(e.target.value)}
           />
         </div>
-        <Button variant="outline" className="bg-white hover:shadow-md" onClick={handleRefresh}>Fetch Deployments</Button>
+        <Button onClick={handleRefresh} disabled={isRefreshing}>Fetch Deployments</Button>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 w-full max-w-4xl mx-auto mb-8">
-        <div className="flex-1 bg-white p-4 rounded-lg shadow-xs">
-          <h3 className="text-sm text-gray-500">Total Deployments</h3>
-          <p className="text-2xl font-bold">{getProjectStats().totalDeployments}</p>
-        </div>
-        <div className="flex-1 bg-white p-4 rounded-lg shadow-xs">
-          <h3 className="text-sm text-gray-500">Success Rate</h3>
-          <p className="text-2xl font-bold">
+        <Card>
+          <CardHeader>
+            <CardDescription>Total Deployments</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold font-mono">{getProjectStats().totalDeployments}</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardDescription>Success Rate</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold font-mono">
             {((getProjectStats().successfulDeployments / getProjectStats().totalDeployments) * 100).toFixed(1)}%
           </p>
-        </div>
-        <div className="flex-1 bg-white p-4 rounded-lg shadow-xs">
-          <h3 className="text-sm text-gray-500">Avg Build Time</h3>
-          <p className="text-2xl font-bold">{getProjectStats().averageBuildTime.toFixed(1)}s</p>
-        </div>
-        <div className="flex-1 bg-white p-4 rounded-lg shadow-xs">
-          <h3 className="text-sm text-gray-500">Most Active</h3>
-          <p className="text-2xl font-bold truncate">{getProjectStats().mostActiveProject}</p>
-        </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardDescription>Avg Build Time</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold font-mono">{getProjectStats().averageBuildTime.toFixed(1)}s</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardDescription>Most Active</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <p className="text-2xl font-bold font-mono truncate">{getProjectStats().mostActiveProject}</p>
+          </CardContent>
+        </Card>
       </div>
 
       <div className="flex justify-between items-center mx-auto w-full max-w-4xl mb-8">
         <h1 className="text-2xl font-bold">Vercel Deployments | {deployments.length}</h1>
-        <Button 
-          variant="outline"
-          onClick={handleRefresh}
-          disabled={isRefreshing}
-          className="gap-2 bg-white hover:shadow-md"
-        >
+        <Button onClick={handleRefresh} disabled={isRefreshing}>
           <RefreshCwIcon className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
