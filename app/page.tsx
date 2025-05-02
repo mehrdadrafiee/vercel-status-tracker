@@ -99,7 +99,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen p-4 gap-4 sm:p-4 font-[family-name:var(--font-geist-sans)] bg-gray-100">
+    <div className="flex flex-col min-h-screen p-4 gap-4 sm:p-4 font-(family-name:--font-geist-sans) bg-gray-100">
       <Header />
       <div className="flex flex-col sm:flex-row justify-around items-center gap-2 w-full max-w-4xl mx-auto mb-8">
         <div className="space-y-2 flex-1">
@@ -123,21 +123,21 @@ export default function Home() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 w-full max-w-4xl mx-auto mb-8">
-        <div className="flex-1 bg-white p-4 rounded-lg shadow-sm">
+        <div className="flex-1 bg-white p-4 rounded-lg shadow-xs">
           <h3 className="text-sm text-gray-500">Total Deployments</h3>
           <p className="text-2xl font-bold">{getProjectStats().totalDeployments}</p>
         </div>
-        <div className="flex-1 bg-white p-4 rounded-lg shadow-sm">
+        <div className="flex-1 bg-white p-4 rounded-lg shadow-xs">
           <h3 className="text-sm text-gray-500">Success Rate</h3>
           <p className="text-2xl font-bold">
             {((getProjectStats().successfulDeployments / getProjectStats().totalDeployments) * 100).toFixed(1)}%
           </p>
         </div>
-        <div className="flex-1 bg-white p-4 rounded-lg shadow-sm">
+        <div className="flex-1 bg-white p-4 rounded-lg shadow-xs">
           <h3 className="text-sm text-gray-500">Avg Build Time</h3>
           <p className="text-2xl font-bold">{getProjectStats().averageBuildTime.toFixed(1)}s</p>
         </div>
-        <div className="flex-1 bg-white p-4 rounded-lg shadow-sm">
+        <div className="flex-1 bg-white p-4 rounded-lg shadow-xs">
           <h3 className="text-sm text-gray-500">Most Active</h3>
           <p className="text-2xl font-bold truncate">{getProjectStats().mostActiveProject}</p>
         </div>
