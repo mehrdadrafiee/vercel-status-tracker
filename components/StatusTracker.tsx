@@ -74,30 +74,30 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
       <div className="space-y-2">
         <div className="flex gap-[2px] items-stretch">
           {deployments.map((deployment, index) => {
-              const deploymentStats = getDeploymentStats(deployment);
-              const isReady = deployment.state === "READY";
-              const barColor = isReady
-                ? "bg-emerald-500 hover:bg-emerald-600"
-                : "bg-red-500 hover:bg-red-600";
+            const deploymentStats = getDeploymentStats(deployment);
+            const isReady = deployment.state === "READY";
+            const barColor = isReady
+              ? "bg-emerald-500 hover:bg-emerald-600"
+              : "bg-red-500 hover:bg-red-600";
 
-              return (
-                <TooltipProvider key={`${deployment.name || 'deployment'}-${deployment.uid || index}`}>
-                  <Tooltip delayDuration={100}>
-                    <TooltipTrigger asChild>
-                      <Button className={`rounded-none first:rounded-l-md last:rounded-r-md flex-1 h-10 transition-colors duration-150 ease-in-out ${barColor}`} />
-                    </TooltipTrigger>
-                    <DeploymentTooltipContent deployment={deployment} deploymentStats={deploymentStats} />
-                  </Tooltip>
-                </TooltipProvider>
-              );
+            return (
+              <TooltipProvider key={`${deployment.name || 'deployment'}-${deployment.uid || index}`}>
+                <Tooltip delayDuration={100}>
+                  <TooltipTrigger asChild>
+                    <Button className={`rounded-none first:rounded-l-md last:rounded-r-md flex-1 h-10 transition-colors duration-150 ease-in-out ${barColor}`} />
+                  </TooltipTrigger>
+                  <DeploymentTooltipContent deployment={deployment} deploymentStats={deploymentStats} />
+                </Tooltip>
+              </TooltipProvider>
+            );
           })}
         </div>
 
         {deployments.length > 0 && deployments[0].ready && (
-           <div className="flex justify-between text-sm text-neutral-500 pt-1">
-             <span>{format(deployments[deployments.length - 1].ready, "MMM d")} - {format(deployments[0].ready, "MMM d, yyyy")}</span>
-             <span>Last {deployments.length} deployments</span>
-           </div>
+          <div className="flex justify-between text-sm text-neutral-500 pt-1">
+            <span>{format(deployments[deployments.length - 1].ready, "MMM d")} - {format(deployments[0].ready, "MMM d, yyyy")}</span>
+            <span>Last {deployments.length} deployments</span>
+          </div>
         )}
       </div>
     </div>
