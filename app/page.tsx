@@ -123,6 +123,13 @@ export default function Home() {
         </div>
       )}
 
+      <div className="flex justify-between items-center mx-auto w-full max-w-4xl mb-8">
+        <h1 className="text-2xl font-bold">Vercel Deployments | {deployments.length}</h1>
+        <Button onClick={handleRefresh} disabled={isRefreshing}>
+          <RefreshCwIcon className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 w-full max-w-4xl mx-auto mb-8">
         <Card>
           <CardHeader>
@@ -158,14 +165,6 @@ export default function Home() {
             <p className="text-2xl font-bold font-mono truncate">{getProjectStats().mostActiveProject}</p>
           </CardContent>
         </Card>
-      </div>
-
-      <div className="flex justify-between items-center mx-auto w-full max-w-4xl mb-8">
-        <h1 className="text-2xl font-bold">Vercel Deployments | {deployments.length}</h1>
-        <Button onClick={handleRefresh} disabled={isRefreshing}>
-          <RefreshCwIcon className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
-          Refresh
-        </Button>
       </div>
       <main className="flex flex-col flex-wrap gap-2 justify-center items-center w-full max-w-4xl mx-auto">  
         {loading ? (
