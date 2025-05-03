@@ -84,7 +84,7 @@ export default function StatusTracker({ deployments, uptime }: StatusTrackerProp
               <TooltipProvider key={`${deployment.name || 'deployment'}-${deployment.uid || index}`}>
                 <Tooltip delayDuration={100}>
                   <TooltipTrigger asChild>
-                    <Button className={`rounded-none first:rounded-l-md last:rounded-r-md flex-1 h-10 transition-colors duration-150 ease-in-out ${barColor}`} />
+                    <Button className={`p-0 rounded-none first:rounded-l-md last:rounded-r-md flex-1 h-10 transition-colors duration-150 ease-in-out ${barColor}`} />
                   </TooltipTrigger>
                   <DeploymentTooltipContent deployment={deployment} deploymentStats={deploymentStats} />
                 </Tooltip>

@@ -1,5 +1,9 @@
-import { CheckCircle2, GitBranch, GitCommit, Clock, User, XCircle } from "lucide-react";
-import StatusTracker from "./StatusTracker";
+"use client"
+
+import React from "react";
+
+import { CheckCircle2, XCircle } from "lucide-react";
+import StatusTracker from "@/components/StatusTracker";
 import { DeploymentProps } from "@/types/deployments";
 import {
   AccordionContent,
@@ -8,7 +12,17 @@ import {
 } from "@/components/ui/accordion"
 import { Badge } from "@/components/ui/badge";
 import { format } from "date-fns";
-import React from "react";
+import { ChartContainer } from "@/components/ui/chart";
+import { Line, LineChart, Tooltip, XAxis } from "recharts";
+import { type ChartConfig } from "@/components/ui/chart"
+
+const chartConfig = {
+  buildTime: {
+    label: "Build time",
+    color: "#2563eb",
+  }
+} satisfies ChartConfig
+
 
 type ProjectAccordionProps = {
   name: string;
@@ -74,33 +88,33 @@ export default function ProjectAccordion({ name, deployments }: ProjectAccordion
         </div>
       </AccordionTrigger>
       <AccordionContent className="p-4">
-        <div className="mb-6 grid grid-cols-2 gap-4 p-4 bg-neutral-200 dark:bg-neutral-800 rounded-lg">
-          <div className="flex items-center gap-2">
-            <GitBranch className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm">
-              Branch: {latestDeployment.meta?.githubCommitRef || 'Unknown'}
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <GitCommit className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm truncate" title={latestDeployment.meta?.githubCommitMessage}>
-              Latest commit: {latestDeployment.meta?.githubCommitMessage || 'No commit message'}
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <User className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm">
-              Author: {latestDeployment.meta?.githubCommitAuthorName || 'Unknown'}
-            </span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Clock className="w-4 h-4 text-neutral-500" />
-            <span className="text-sm">
-              Average build time: {((deployments.reduce((acc, deployment) => acc + (deployment.ready - deployment.buildingAt), 0) / deployments.length / 1000).toFixed(1))}s
-            </span>
-          </div>
-        </div>
         <StatusTracker deployments={deployments} uptime={uptime} />
+        <ChartContainer config={chartConfig} className="h-[100px] w-full">
+          <LineChart accessibilityLayer data={deployments.map((deployment) => ({
+            date: format(new Date(deployment.buildingAt), 'MMM d, yyyy'),
+            buildTime: deployment.ready - deployment.buildingAt,
+          }))}>
+            <Line type="monotone" dataKey="buildTime" stroke="#8884d8" />
+            <XAxis dataKey="date" />
+            <Tooltip content={({ active, payload }) => {
+              if (active && payload && payload.length) {
+                const buildTimeMs = payload[0].value;
+                if (typeof buildTimeMs === 'number') {
+                  const buildTimeSec = (buildTimeMs / 1000).toFixed(2);
+                  return (
+                    <div className="rounded-lg bg-background p-2 shadow-md">
+                      <div className="flex flex-col gap-1">
+                         <span className="text-sm text-muted-foreground">{payload[0].payload.date}</span>
+                         <span className="font-semibold">Build time: {buildTimeSec}s</span>
+                      </div>
+                    </div>
+                  );
+                }
+              }
+              return null;
+            }} />
+          </LineChart>
+        </ChartContainer>
       </AccordionContent>
     </AccordionItem>
   );

@@ -40,7 +40,7 @@ export default function DeploymentTooltipContent({ deployment, deploymentStats }
   const isReady = deployment.state === "READY";
 
   return (
-    <TooltipContent className="p-4 bg-white dark:bg-black shadow-md space-y-3" sideOffset={5}>
+    <TooltipContent className="p-4 z-10 bg-background shadow-md space-y-3 rounded-lg" sideOffset={5}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {getStatusIcon(deployment.state)}
