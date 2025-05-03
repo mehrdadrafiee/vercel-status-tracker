@@ -102,9 +102,10 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-screen p-4 gap-4 sm:p-4 font-(family-name:--font-geist-sans)">
       <Header />
-      <div className="flex flex-col sm:flex-row justify-around items-center gap-2 w-full max-w-4xl mx-auto mb-8">
-        <div className="space-y-2 flex-1">
-          <Input
+      {process.env.NODE_ENV !== "development" && (
+        <div className="flex flex-col sm:flex-row justify-around items-center gap-2 w-full max-w-4xl mx-auto mb-8">
+          <div className="space-y-2 flex-1">
+            <Input
             value={teamIdValue}
             placeholder="Vercel team id: team_xxxxxx"
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setTeamIdValue(e.target.value)}
@@ -118,8 +119,9 @@ export default function Home() {
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => setApiTokenValue(e.target.value)}
           />
         </div>
-        <Button onClick={handleRefresh} disabled={isRefreshing}>Fetch Deployments</Button>
-      </div>
+          <Button onClick={handleRefresh} disabled={isRefreshing}>Fetch Deployments</Button>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 w-full max-w-4xl mx-auto mb-8">
         <Card>
